@@ -25,6 +25,36 @@ Installation
 
 Pubsub is on `MELPA <https://melpa.org/>`_, so you can install it in the usual way using your package manager of choice (e.g., `Straight.el <https://github.com/radian-software/straight.el>`_, `Elpaca <https://github.com/progfolio/elpaca>`_, or Emacs's built-in package.el), after ensuring you have MELPA in your configured list of package archives.
 
+Examples
+--------
+
+To subscribe to a topic:
+
+.. code-block:: elisp
+
+  (pubsub-subscribe "my-new-topic"
+                    "my-subscriber"
+                    (lambda (notice)
+                      (message "Received: %s" notice)))
+
+We can publish a notice to the topic. A notice can be any value, but we use a string here for simplicity:
+
+.. code-block:: elisp
+
+  (pubsub-publish "my-new-topic"
+                  "hello there!")
+
+Switch to the ``*Messages*`` buffer to see the printed output.
+
+To unsubscribe:
+
+.. code-block:: elisp
+
+  (pubsub-unsubscribe "my-new-topic"
+                      "my-subscriber")
+
+Now, notices published on this topic will no longer be received by the subscriber.
+
 About this Implementation
 -------------------------
 
@@ -53,36 +83,6 @@ Emacs's built-in "hooks" are a simple form of pub/sub. However, they are primari
 - You need robust error handling: If one subscriber to a standard hook fails with an error, it can stop the entire chain. pubsub isolates subscribers, so a faulty one will be gracefully disabled without affecting the others.
 
 - You need to manage subscribers by name: pubsub allows you to subscribe and unsubscribe functions using a stable name, which is easier and more reliable than trying to manage anonymous lambda functions in a hook.
-
-Examples
-~~~~~~~~
-
-To subscribe to a topic:
-
-.. code-block:: elisp
-
-  (pubsub-subscribe "my-new-topic"
-                    "my-subscriber"
-                    (lambda (notice)
-                      (message "Received: %s" notice)))
-
-We can publish a notice to the topic. A notice can be any value, but we use a string here for simplicity:
-
-.. code-block:: elisp
-
-  (pubsub-publish "my-new-topic"
-                  "hello there!")
-
-Switch to the ``*Messages*`` buffer to see the printed output.
-
-To unsubscribe:
-
-.. code-block:: elisp
-
-  (pubsub-unsubscribe "my-new-topic"
-                      "my-subscriber")
-
-Now, notices published on this topic will no longer be received by the subscriber.
 
 Applications
 ~~~~~~~~~~~~
