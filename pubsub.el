@@ -43,7 +43,9 @@ an anonymous lambda.")
 (defun pubsub-publish (topic notice)
   "Publish NOTICE to TOPIC.
 
-This notifies each subscriber to TOPIC of the fresh NOTICE.
+This notifies each subscriber to TOPIC of the fresh NOTICE. If there
+are no subscribers (including if the topic doesn't exist), no action
+is taken.
 
 The notification is performed as a simple function invocation, where
 each subscriber function (callback) to TOPIC is invoked with the fresh
@@ -70,6 +72,8 @@ duplicate subscribers (e.g., if a subscriber with that name already
 exists, the new one will not be added redundantly) and also may be
 used to subsequently unsubscribe the CALLBACK from TOPIC.
 
+If TOPIC doesn't already exist in `pubsub-board', it will be added.
+
 CALLBACK must be a function accepting a single argument.  It will be
 invoked with each fresh notice on TOPIC."
   (puthash topic
@@ -84,10 +88,7 @@ invoked with each fresh notice on TOPIC."
 (defun pubsub-unsubscribe (topic subscriber-name)
   "Unsubscribe SUBSCRIBER-NAME from TOPIC.
 
-This removes CALLBACK from the list of subscribers to TOPIC.
-
-Note that, in general, only named callbacks may be unsubscribed,
-as anonymous lambdas cannot easily be identified for removal."
+This removes CALLBACK from the list of subscribers to TOPIC."
   (puthash topic
            (remove subscriber-name
                    (gethash topic pubsub-board))
