@@ -25,8 +25,8 @@ Installation
 
 Pubsub is on `MELPA <https://melpa.org/>`_, so you can install it in the usual way using your package manager of choice (e.g., `Straight.el <https://github.com/radian-software/straight.el>`_, `Elpaca <https://github.com/progfolio/elpaca>`_, or Emacs's built-in package.el), after ensuring you have MELPA in your configured list of package archives.
 
-Examples
---------
+Usage
+-----
 
 To subscribe to a topic:
 
