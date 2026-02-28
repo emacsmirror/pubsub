@@ -54,8 +54,38 @@ Emacs's built-in "hooks" are a simple form of pub/sub. However, they are primari
 
 - You need to manage subscribers by name: pubsub allows you to subscribe and unsubscribe functions using a stable name, which is easier and more reliable than trying to manage anonymous lambda functions in a hook.
 
-Example Applications
-~~~~~~~~~~~~~~~~~~~~
+Examples
+~~~~~~~~
+
+To subscribe to a topic:
+
+.. code-block:: elisp
+
+  (pubsub-subscribe "my-new-topic"
+                    "my-subscriber"
+                    (lambda (notice)
+                      (message "Received: %s" notice)))
+
+We can publish a notice to the topic. A notice can be any value, but we use a string here for simplicity:
+
+.. code-block:: elisp
+
+  (pubsub-publish "my-new-topic"
+                  "hello there!")
+
+Switch to the ``*Messages*`` buffer to see the printed output.
+
+To unsubscribe:
+
+.. code-block:: elisp
+
+  (pubsub-unsubscribe "my-new-topic"
+                      "my-subscriber")
+
+Now, notices published on this topic will no longer be received by the subscriber.
+
+Applications
+~~~~~~~~~~~~
 
 The `Mantra <https://github.com/countvajhula/mantra>`_ package parses user activity into a high level and precise descriptions of what happened, for instance, recording key sequences or text insertions into the buffer, or window changes, or anything else of interest. It publishes these parsed events on a topic, say, "mantra-keyboard-activity", without needing to know who might be interested in this data. The `Symex <https://github.com/drym-org/symex.el>`_ package subscribes to such parsed keyboard activity for the purposes of allowing users to repeat recent actions in a flexible way. The data could also be used to create a command history, compute statistics on keyboard activity (e.g., "most common words typed" or "most frequent commands used"), or power a tutorial tool that detects inefficient key sequences and suggests better alternatives. None of these tools need to know about each other and do not interfere with one another, and can be added and removed at will, without requiring changes in the others.
 
